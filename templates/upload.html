@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Загрузка изображения</title>
+  </head>
+  <body>
+
+    {% if msg %}
+    <h1>{{ msg }}</h1>
+    {% endif %}
+    
+    <h1>Загрузите новый файл</h1>
+    
+    <form method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+   
+    <h1>Результат:</h1>
+    {% if img_src %}
+      <p> ССылка для скачивания: <b> <a href="{{ img_src }}"> </b></p>
+      <img src="{{ img_src }}" width="800">
+    {% endif %}
+    {% if pdf_src %}
+      <p> ССылка для скачивания: <b> <href="{{ pdf_src }}"> </b></p>
+      <object type="application/pdf" data="{{ pdf_src }}" width="720">Не удалось показать документ</object>
+    {% endif %}
+  </body>
+</html>
