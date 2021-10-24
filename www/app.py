@@ -38,7 +38,7 @@ def home_page():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_page():
     if request.method == 'POST':
-        # check if the post request has the file part
+
         if 'file' not in request.files:
             return render_template('upload.html', msg='Файл не выбран')
         file = request.files['file']
@@ -50,11 +50,13 @@ def upload_page():
             file.save(os.path.join(os.getcwd() + LOAD, file.filename)) #сохранение файла
             
             if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
-               jpegs = conv_pdf(os.path.join(os.getcwd() + LOAD, file.filename))
+               jpegs = conv_pdf(os.path.join(os.getcwd() + LOAD, file.filename)) # список JPEG файлов преобразованных из PDF 
             else: jpegs = [Image.open(file)]
             
-            jpegs_ocr = list(map(tess_pavlov_ner_rus.ocr_core, jpegs))
+            #деперсонификация данных
+            jpegs_ocr = list(map(solver_natasha.ocr_core, jpegs))
             print("ocr ok")
+            
             if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
                render_pdf = f"{random.randint(0, 32000)}_ocr.pdf"
                jpegs_ocr[0].save(os.path.join(os.getcwd() + UPLOAD_FOLDER, render_pdf),
