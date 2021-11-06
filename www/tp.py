@@ -85,14 +85,17 @@ def get_contours(image):
          coordinates.append((x,y,w,h))
    return coordinates
 
-def recognize_table(image,coordinates):
+def sort2(val):   #helper for sorting by y
+   return val[1]
+
+def recognize_table(image, coordinates):
    recognized_table = row = []
    prev_y = 0
    coordinates.sort() #sort by x
    coordinates.sort(key = sort2) # sort by y
    for coord in coordinates:
       x,y,w,h = coord
-      if y>prev_y+5: #new row if y is changed
+      if y > prev_y+5: #new row if y is changed
          recognized_table.append(row)
          row = [] 
       crop_img = image[y:y+h, x:x+w]
@@ -101,16 +104,11 @@ def recognize_table(image,coordinates):
       prev_y = y
    return recognized_table
 
-def img_to_nparray(pix):
-   arr_img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.h, pix.w, pix.n)
-   arr_img = np.ascontiguousarray(arr_img[..., [2, 1, 0]])
-   return arr_img
-
 def func(pic):
    image = numpy.array(pic) #np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.h, pix.w, pix.n)
    image = np.ascontiguousarray(image[..., [2, 1, 0]])  
    contours_coords = get_contours(page)
-   recognize_table(page,contours_coords)
+   recognize_table(pic, contours_coords)
       
 
 # Then, after you make your changes to the array, you should be able to do either pic.putdata(pix) or create a new image with Image.fromarray(pix).
