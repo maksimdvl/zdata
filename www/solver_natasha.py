@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
 import natasha, pytesseract
 
+from www.snils_pasport_phone_detect import Get_All_spans
 
 def ocr_core(img):
    #Распознаем изображение в текст
@@ -9,9 +10,24 @@ def ocr_core(img):
    if len(text) < 5:return img 
 
    # Для лингвистического анализа используем библиотеку Natasha
-   extractor = natasha.NamesExtractor()
-   matches = extractor(text)
-   spans = [_.span for _ in matches]
+   #extractor = natasha.NamesExtractor()
+   #matches = extractor(text)
+   #spans = [_.span for _ in matches]
+
+   # ----------------------------
+   extractors = [
+      natasha.NamesExtractor(),
+      natasha.AddressExtractor(),
+   ]
+   spans = []
+   for extractor in extractors:
+      matches = extractor(text)
+      spans.extend(_.span for _ in matches)
+
+   for i in Get_All_spans(text):
+      spans.append(i)
+   # -------------------------------
+
 
    fioList = [text[slice(*sl)] for sl in spans if len(text[slice(*sl)]) > 2]  # [Протасов Александр Сергеевич, ...]
    # Формируем список для закрашивания именованных сущностей из текста
@@ -19,7 +35,7 @@ def ocr_core(img):
                  .replace(" ", "|") \
                  .replace("\n", "|")              # "Протасов|Александр|Сергеевич|Киселев|Филипп|Михайлович|Вишневская|Елена|Владимировна"
 
-    if name_str == "": return img
+   if name_str == "": return img
    
    #Распознаем изображение в блоки с координатами
    df = pytesseract.image_to_data(img, config=r'-l rus --psm 6', output_type=pytesseract.Output.DATAFRAME)
