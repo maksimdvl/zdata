@@ -1,7 +1,6 @@
-from PIL import Image, ImageDraw
+import PIL
 import pytesseract
 import numpy as np
-from deeppavlov import configs, build_model
 
 def ocr_core(img, ner):  
    df = ocr(img)
@@ -33,6 +32,6 @@ def df_filter(df_words, tokens, tags):
 def img_draw(img, df_name):
    for idx, row in df_name[:].iterrows():
       (x, y, w, h) = (row['left'], row['top'], row['width'], row['height'])
-      pencil = ImageDraw.Draw(img)
+      pencil = PIL.ImageDraw.Draw(img)
       pencil.rectangle((x, y, x + w, y + h), fill='green')
    return img
