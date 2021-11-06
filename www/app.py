@@ -15,12 +15,12 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'pdf'])
 
 app = Flask(__name__)
 
-ner(download=False)
-
-def ner(download=False):
+def build_ner():
    config_path = configs.ner.ner_rus_bert
    ner = build_model(config_path, download=False)
-   return ner   
+   return ner 
+
+ner = build_ner()
 
 def pdf_to_image(pdf_file):
    return pdf2image.convert_from_path(pdf_file, dpi=300, fmt='png')
