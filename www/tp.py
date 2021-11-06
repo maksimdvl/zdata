@@ -12,9 +12,7 @@ def ocr_core(img, ner):
    return img
 
 def ocr(img):
-   config = r'-l rus --psm 6 --oem 1'
-   output_type=pytesseract.Output.DATAFRAME
-   return pytesseract.image_to_data(img, config, output_type)
+   return pytesseract.image_to_data(img, config=r'-l rus --psm 6 --oem 1', output_type=pytesseract.Output.DATAFRAME)
 
 def df_extract(df):
    df_words = df[['level', 'left', 'top', 'width', 'height', 'text', 'conf']]
