@@ -8,7 +8,7 @@ def ocr_core(img, ner):
    df_words = df_extract(df) 
   
    tokens, tags = ner([df_words['text'].to_list()])
-   df_name = df_filter(df_words)
+   df_name = df_filter(df_words, tokens, tags)
    return img
 
 def ocr(img):
@@ -22,7 +22,7 @@ def df_extract(df):
    df_words = df_words[df_words['level']==5]
    return df_words  
 
-def df_filter(df_words):
+def df_filter(df_words, tokens, tags):
    df_words.loc[:, "tok"] = tokens[0]
    df_words.loc[:, "tag"] = tags[0]
   
