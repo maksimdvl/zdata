@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 import natasha, pytesseract
 
-from www.snils_pasport_phone_detect import Get_All_spans
+from snils_pasport_phone_detect import Get_All_spans
 
 def ocr_core(img):
    #Распознаем изображение в текст
