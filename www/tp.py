@@ -10,7 +10,7 @@ def ocr_core(img, ner):
   
    tokens, tags = ner([df_words['text'].to_list()])
    df_name = df_filter(df_words, tokens, tags)
-   return img
+   return img_draw(img, df_name)
 
 def ocr(img):
    return pytesseract.image_to_data(img, config=r'-l rus --psm 6 --oem 1', output_type=pytesseract.Output.DATAFRAME)
