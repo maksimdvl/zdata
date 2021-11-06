@@ -4,6 +4,13 @@ import numpy as np
 import pdf2image
 from deeppavlov import configs, build_model
 
+def images_ocr(images, ner):
+   image_ocr = list() #list(map(easyner.ocr_core, param))
+   for img in images:
+      img_blur = ocr_core(img, ner)
+      image_ocr.append(img_blur)
+   return image_ocr
+
 def ocr_core(img, ner):  
    df = ocr(img)
    df_words = df_extract(df) 
@@ -45,10 +52,3 @@ def build_ner():
 
 def pdf_to_image(pdf_file):
    return pdf2image.convert_from_path(pdf_file, dpi=300, fmt='png')
-
-def images_ocr(images, ner):
-   image_ocr = list() #list(map(easyner.ocr_core, param))
-   for img in images:
-      img_blur = ocr_core(img, ner)
-      image_ocr.append(img_blur)
-   return image_ocr
