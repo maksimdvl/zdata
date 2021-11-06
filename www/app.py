@@ -79,7 +79,7 @@ def addit_upload_page():
             file.save(os.path.join(os.getcwd() + LOAD, file.filename))  # сохранение файла
 
             if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
-                jpegs = pdf_to_image(os.path.join(os.getcwd() + LOAD, file.filename))  # список JPEG файлов преобразованных из PDF
+                jpegs = tp.pdf_to_image(os.path.join(os.getcwd() + LOAD, file.filename))  # список JPEG файлов преобразованных из PDF
             else:
                 jpegs = [Image.open(file)]
 
