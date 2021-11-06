@@ -4,26 +4,14 @@ from PIL import Image
 from flask import Flask, render_template, request
 import numpy as np
 import tp
-import pdf2image
 from itertools import zip_longest
-from deeppavlov import configs, build_model
-
 
 LOAD = '/load/'
 UPLOAD_FOLDER = '/static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'pdf'])
 
 app = Flask(__name__)
-
-def build_ner():
-   config_path = configs.ner.ner_rus_bert
-   ner = build_model(config_path, download=False)
-   return ner 
-
-ner = build_ner()
-
-def pdf_to_image(pdf_file):
-   return pdf2image.convert_from_path(pdf_file, dpi=300, fmt='png')
+ner = tp.build_ner()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -48,13 +36,10 @@ def upload_page():
             f = file.save(os.path.join(os.getcwd() + LOAD, file.filename)) #сохранение файла
             
             if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
-               images = pdf_to_image(os.path.join(os.getcwd() + LOAD, file.filename))
+               images = tp.pdf_to_image(os.path.join(os.getcwd() + LOAD, file.filename))
             else: images = [Image.open(file)]
             
-            image_ocr = list() #list(map(easyner.ocr_core, param))
-            for img in images:
-               img_blur = tp.ocr_core(img, ner)
-               image_ocr.append(img_blur)
+            image_ocr = tp.images_ocr(images, ner)
             
             print("ocr ok")
             if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
