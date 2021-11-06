@@ -3,6 +3,7 @@ import random
 from PIL import Image
 from flask import Flask, render_template, request
 import numpy as np
+import solver_natasha
 import tp
 from itertools import zip_longest
 
