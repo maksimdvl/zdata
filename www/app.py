@@ -15,6 +15,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'pdf'])
 
 app = Flask(__name__)
 
+ner(download=False)
+
 def ner(download=False):
    config_path = configs.ner.ner_rus_bert
    ner = build_model(config_path, download=False)
