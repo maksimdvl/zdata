@@ -62,6 +62,51 @@ def upload_page():
                                       img_src=UPLOAD_FOLDER + render_img)
     elif request.method == 'GET':
         return render_template('upload.html')
+    
+@app.route('/addit_upload', methods=['GET', 'POST'])
+def addit_upload_page():
+    if request.method == 'POST':
 
+        if 'file' not in request.files:
+            return render_template('addit_upload.html', msg='Файл не выбран')
+        file = request.files['file']
+
+        if file.filename == '':
+            return render_template('addit_upload.html', msg='Файл не выбран')
+
+        if file and allowed_file(file.filename):
+            file.save(os.path.join(os.getcwd() + LOAD, file.filename))  # сохранение файла
+
+            if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
+                jpegs = pdf_to_image(os.path.join(os.getcwd() + LOAD, file.filename))  # список JPEG файлов преобразованных из PDF
+            else:
+                jpegs = [Image.open(file)]
+
+            # деперсонификация данных
+            jpegs_ocr = list(map(solver_natasha.ocr_core, jpegs))
+            print("ocr ok")
+
+            if file.filename.rsplit('.', 1)[1].lower() == 'pdf':
+                render_pdf = f"{random.randint(0, 32000)}_ocr.pdf"
+                jpegs_ocr[0].save(os.path.join(os.getcwd() + UPLOAD_FOLDER, render_pdf),
+                                  save_all=True,
+                                  append_images=jpegs[1:], resolution=100)
+
+                return render_template('addit_upload.html',
+                                       msg='Процесс закончен',
+                                       type='pdf',
+                                       pdf_src=UPLOAD_FOLDER + render_pdf)
+            else:
+                render_img = f"{random.randint(0, 32000)}_ocr.jpeg"
+                jpegs_ocr[0].save(os.path.join(os.getcwd() + UPLOAD_FOLDER, render_img))
+
+                return render_template('addit_upload.html',
+                                       msg='Процесс закончен',
+                                       type='jpeg',
+                                       img_src=UPLOAD_FOLDER + render_img)
+    elif request.method == 'GET':
+        return render_template('addit_upload.html')
+    
+    
 if __name__ == '__main__':
     app.run()
