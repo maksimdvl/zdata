@@ -11,9 +11,10 @@ def ocr_core(img, ner):
    df_name = df_filter(df_words)
    return img
 
-def ocr(img, config = r'-l rus --psm 6 --oem 1'):
-  output_type=pytesseract.Output.DATAFRAME
-  return pytesseract.image_to_data(img, config, output_type)
+def ocr(img):
+   config = r'-l rus --psm 6 --oem 1'
+   output_type=pytesseract.Output.DATAFRAME
+   return pytesseract.image_to_data(img, config, output_type)
 
 def df_extract(df):
    df_words = df[['level', 'left', 'top', 'width', 'height', 'text', 'conf']]
