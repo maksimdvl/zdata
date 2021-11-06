@@ -1,4 +1,4 @@
-import PIL
+from PIL import Image, ImageDraw
 import pytesseract
 import numpy as np
 import pdf2image
@@ -49,7 +49,7 @@ def df_filter(df_words, tokens, tags):
 def img_draw(img, df_name):
    for idx, row in df_name[:].iterrows():
       (x, y, w, h) = (row['left'], row['top'], row['width'], row['height'])
-      pencil = PIL.ImageDraw.Draw(img)
+      pencil = ImageDraw.Draw(img)
       pencil.rectangle((x, y, x + w, y + h), fill='green')
    return img
 
